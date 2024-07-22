@@ -26,6 +26,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 					if err := migrator.Lock(c.Context); err != nil {
 						return err
 					}
+
 					defer migrator.Unlock(c.Context) //nolint:errcheck
 
 					group, err := migrator.Migrate(c.Context)
@@ -37,7 +38,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						return nil
 					}
 					fmt.Printf("migrated to %s\n", group)
-					return nil
+					return cli.Exit("migrated", 0)
 				},
 			},
 			{
@@ -58,7 +59,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						return nil
 					}
 					fmt.Printf("rolled back %s\n", group)
-					return nil
+					return cli.Exit("rolled back", 0)
 				},
 			},
 			{
@@ -85,7 +86,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						return err
 					}
 					fmt.Printf("created migration %s (%s)\n", mf.Name, mf.Path)
-					return nil
+					return cli.Exit("", 0)
 				},
 			},
 			{
@@ -102,7 +103,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						fmt.Printf("created migration %s (%s)\n", mf.Name, mf.Path)
 					}
 
-					return nil
+					return cli.Exit("", 0)
 				},
 			},
 			{
@@ -119,7 +120,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						fmt.Printf("created transaction migration %s (%s)\n", mf.Name, mf.Path)
 					}
 
-					return nil
+					return cli.Exit("", 0)
 				},
 			},
 			{
@@ -133,7 +134,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 					fmt.Printf("migrations: %s\n", ms)
 					fmt.Printf("unapplied migrations: %s\n", ms.Unapplied())
 					fmt.Printf("last migration group: %s\n", ms.LastGroup())
-					return nil
+					return cli.Exit("", 0)
 				},
 			},
 			{
@@ -149,7 +150,7 @@ func newDBCommand(migrator *migrate.Migrator) *cli.Command {
 						return nil
 					}
 					fmt.Printf("marked as applied %s\n", group)
-					return nil
+					return cli.Exit("", 0)
 				},
 			},
 		},
