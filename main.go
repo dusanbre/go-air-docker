@@ -1,6 +1,8 @@
 package main
 
 import (
+	"dusanbre/test-1/cmd"
+	"dusanbre/test-1/database"
 	"dusanbre/test-1/middleware"
 	"dusanbre/test-1/router"
 	"fmt"
@@ -17,6 +19,10 @@ func main() {
 	stack := middleware.Chain(
 		middleware.Loging,
 	)
+
+	db := database.Connect()
+
+	cmd.InitCli(db)
 
 	server := http.Server{
 		Addr:    ":3000",
